@@ -1,0 +1,160 @@
+{% extends "app3/layouts/base.html" %}
+
+{% block title %}Lista de Eventos{% endblock %}
+  {% load static %}
+{% block conteudo %}
+
+ <style>
+.testbutton {
+  font-family: "Poppins" , sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 45px;
+  border: none;
+  box-shadow: 1px 1px 1px #2AAB16;
+  background: #FFFFFF;
+  transition: 0.3s;
+}
+.testbutton:hover {
+  color: #FFFFFF !important;
+  background: #33CF1B;
+  background: linear-gradient(to top, #2AAB16, #0C81E8);
+  text-decoration: none;
+  border: 2px groove #FFFFFF;
+}
+.testbutton:active {
+  transform: translatey(8px);
+}
+.effectEx {
+  color: red;
+  font-size: 30px;
+}
+.effectEx:hover {
+  color: #B10B11;
+}
+.effectEx:active {
+    transform: translateY(4px);
+}
+.effectEd {
+  font-size: 30px;
+}
+.effectEd:active {
+    transform: translateY(4px);
+}
+.container a .tool{
+  position: fixed;
+  z-index: 3;
+  color: white;
+  background:#4e555b;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 15px;
+  opacity: 0;
+  transition: 0s;
+  pointer-events: none;
+  white-space: nowrap;
+  font-weight: 400;
+  margin-left: 10px;
+}
+.container a:hover .tool{
+  opacity: 1;
+  pointer-events: auto;
+  transition: all 0.4s ease;
+  transform: translateY(-50%);
+  top: auto;
+}
+ </style>
+
+<div class="container" style="padding: 60px 0px; margin-left: 120px; width: 1380px; display: flex">
+  <div class="row">
+    <div class="col-lg-15 col-md-12 col-sm-12 col-xs-12" style="padding: 0px">
+      <div class="card">
+        <div class="card-body" style="padding-bottom: 10px">
+          <h5 class="card-title">Lista de Eventos</h5>
+
+          {% if eventos|length > 0 %}
+            <p class="card-text">
+              Aqui está a lista de <code>Eventos</code> cadastrados.
+            </p>
+
+            <div class="search-list">
+            <table class="table" id="myTable">
+              <thead class="thead-dark">
+              <tr>
+                <th scope="col">Título</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Data</th>
+                <th scope="col">Hora</th>
+                <th scope="col">Local</th>
+                <th scope="col">Rua</th>
+                <th scope="col">Número</th>
+                <th scope="col">Carga Horária</th>
+                <th scope="col">Link</th>
+                  <th scope="col">Banner</th>
+                <th scope="col" class="text-center">Ações</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for evento in eventos %}
+                <tr>
+                  <th scope="row">{{ evento.titulo }}</th>
+                  <td>{{ evento.categoria }}</td>
+                  <td>{{ evento.data }}</td>
+                  <td>{{ evento.hora }}</td>
+                  <td>{{ evento.local }}</td>
+                  <td>{{ evento.rua }}</td>
+                  <td>{{ evento.numero }}</td>
+                  <td>{{ evento.carga }}</td>
+                  <td>{{ evento.link }}</td>
+                  <td><img src="{{ evento.imagem.url }}" style="width: 124px;"></td>
+                  <td class="text-center">
+                    <a href="{% url 'app1:atualiza_evento' pk=evento.id %}">
+                      <i class='bx bx-edit effectEd'></i>
+                        <span class="tool">Atualizar</span>
+                    </a>
+                    <a href="{% url 'app1:deleta_evento' pk=evento.id %}">
+                      <i class='bx bx-trash effectEx'></i>
+                        <span class="tool">Excluir</span>
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+            </div>
+        {% else %}
+          <div class="text-center mt-5 mb-5 jumbotron">
+            <h5>Nenhum <code>Evento</code> cadastrado ainda.</h5>
+          </div>
+        {% endif %}
+          <hr />
+          <div class="text-center" style="padding-top: 5px; padding-bottom: 5px">
+            <a href="{% url 'app1:cadastra_evento' %}">
+                <i class='bx bx-user-plus testbutton' style="border: none; padding-right: 20px;
+                  color: #2AAB16; font-size: 40px"></i>
+                <span class="tool">Cadastrar Evento</span>
+            </a>
+          </div>
+        <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+$(document).ready(function() {
+    var baseUrl  = 'http://127.0.0.1:8000/';
+    var filter   = $('#filter');
+
+    $(filter).change(function() {
+        var filter = $(this).val();
+        window.location.href = baseUrl + '?filter=' + filter;
+    });
+});
+
+</script>
+{% endblock %}
